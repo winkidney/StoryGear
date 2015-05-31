@@ -9,7 +9,7 @@ from setuptools import setup, find_packages
 here = os.path.abspath(os.path.dirname(__file__))
 
 requires = [
-    'django',
+    'django>=1.8',
 ]
 
 setup(
@@ -21,5 +21,5 @@ setup(
     author='kidney',
     author_email='winkidney@gmail.com',
     description='Gear to make stories by muliti-person.',
-    requires=requires,
+    install_requires=requires,
 )
