@@ -14,7 +14,7 @@ class Tag(models.Model):
     class Meta:
         verbose_name_plural = u"Chapter"
         verbose_name = u"Chapter"
-        ordering = ['ctime']
+        ordering = ['name']
         db_table = "tags"
 
     name = models.CharField(max_length=250, db_index=True, verbose_name="title")
@@ -40,7 +40,7 @@ class RChapter(models.Model):
     is_draft = models.BooleanField(default=False, db_index=True)
 
     author = models.ForeignKey(User, null=True, blank=False)
-    ctime = models.ForeignKey(default=0)
+    ctime = models.DateTimeField(auto_now_add=True)
 
 
 class Chapter(models.Model):
@@ -50,12 +50,12 @@ class Chapter(models.Model):
     class Meta:
         verbose_name_plural = u"Chapter"
         verbose_name = u"Chapter"
-        ordering = ['title']
+        ordering = ['index']
         db_table = "chapters"
 
-    rchapters = models.ManyToManyField(RChapter)
+    rchapters = models.ManyToManyField(RChapter, "rchapters")
     index = models.IntegerField(default=0, null=False, blank=False, db_index=True)
-    selected = models.ForeignKey(RChapter)
+    selected = models.ForeignKey(RChapter, related_name="selected")
 
 
 class Story(models.Model):
@@ -71,10 +71,10 @@ class Story(models.Model):
     title = models.CharField(max_length=255, verbose_name=u'name', db_index=True)
     description = models.TextField(verbose_name=u'description')
 
-    tags = models.ManyToManyField("Tag")
+    tags = models.ManyToManyField(Tag, related_name="tags")
 
     chapter_count = models.IntegerField(default=0, verbose_name=u"Count")
-    chapters = models.ManyToManyField(Chapter, verbose_name=u"Count")
+    chapters = models.ManyToManyField(Chapter, related_name="chapters", verbose_name=u"Count")
 
     author = models.ForeignKey(User)
     is_draft = models.BooleanField(default=False, db_index=True)
