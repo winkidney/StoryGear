@@ -1,5 +1,5 @@
 from django.shortcuts import render_to_response
-from storygear.core import RestMixin
+from storygear import RestMixin
 
 
 class StoryHomeView(RestMixin):

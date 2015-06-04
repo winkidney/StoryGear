@@ -2,11 +2,10 @@ from django.http import HttpResponseBadRequest
 
 
 class RestMixin(object):
-    csrf_exempt = False
 
     def __init__(self, csrf_exempt=False, decorators=None):
         self.decorators = decorators
-        self.csrf_exemp = csrf_exempt
+        self.csrf_exempt = csrf_exempt
 
     def call(self, function, *args, **kwargs):
         if self.decorators is None:
