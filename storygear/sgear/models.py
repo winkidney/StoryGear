@@ -17,7 +17,7 @@ class Tag(models.Model):
         ordering = ['name']
         db_table = "tags"
 
-    name = models.CharField(max_length=250, db_index=True, verbose_name="title")
+    name = models.CharField(max_length=250, db_index=True, verbose_name="name")
     description = models.TextField()
     story_count = models.BigIntegerField(default=0)
 
@@ -45,7 +45,7 @@ class RChapter(models.Model):
 
 class Chapter(models.Model):
     def __unicode__(self):
-        return u"%s" % self.title
+        return u"%s" % self.index
 
     class Meta:
         verbose_name_plural = u"Chapter"
@@ -53,9 +53,10 @@ class Chapter(models.Model):
         ordering = ['index']
         db_table = "chapters"
 
-    rchapters = models.ManyToManyField(RChapter, "rchapters")
+    rchapters = models.ManyToManyField(RChapter, blank=True, related_name="rchapters")
     index = models.IntegerField(default=0, null=False, blank=False, db_index=True)
-    selected = models.ForeignKey(RChapter, related_name="selected")
+    selected = models.ForeignKey(RChapter, blank=True, null=True, related_name="selected")
+    voted = models.BooleanField(default=False, blank=False, null=False, help_text=u"If the best has been voted.")
 
 
 class Story(models.Model):
@@ -70,11 +71,16 @@ class Story(models.Model):
 
     title = models.CharField(max_length=255, verbose_name=u'name', db_index=True)
     description = models.TextField(verbose_name=u'description')
+    content = models.TextField(blank=True, help_text=u"chapter zero")
 
     tags = models.ManyToManyField(Tag, related_name="tags")
 
-    chapter_count = models.IntegerField(default=0, verbose_name=u"Count")
-    chapters = models.ManyToManyField(Chapter, related_name="chapters", verbose_name=u"Count")
+    chapter_count = models.IntegerField(default=0, verbose_name=u"Chapter count")
+    chapters = models.ManyToManyField(Chapter, related_name="chapters", verbose_name=u"Chapters")
+    latest_chapter = models.IntegerField(default=0, null=False, blank=False)
+
+    rank = models.IntegerField(default=0, null=False, blank=False)
+    like = models.IntegerField(default=0, null=False, blank=False)
 
     author = models.ForeignKey(User)
     is_draft = models.BooleanField(default=False, db_index=True)
