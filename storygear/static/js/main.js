@@ -17,8 +17,6 @@ angular.module("demoApp", ['ui.bootstrap'])
                 size: size
             });
         };
-
-
         $interval(function () {
             console.log("hello!");
         }, 50000, 0);
