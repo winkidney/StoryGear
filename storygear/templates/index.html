@@ -6,7 +6,7 @@
 
     <p><span class="fa-bold">故事齿轮</span>是一个写作和接龙的平台，扫清繁琐的合作流程，让你可以和自己喜欢的人一起写喜欢的东西！</p>
     <div class="center-block text-center">
-      <a class="btn btn-primary btn-lg" href="#" role="button">新的故事</a>
+      <a class="btn btn-primary btn-lg" href="/story/new/" role="button">新的故事</a>
       <a class="btn btn-primary btn-lg" href="#" role="button">续写章节</a>
       <a class="btn btn-primary btn-lg" href="#" role="button">章节投票</a>
     </div>
@@ -17,7 +17,6 @@
 {% block in_container %}
 
   <h1>热门的故事</h1>
-  <!-- Example row of columns -->
   <div class="row">
   {% for story in stories %}
     <div class="col-md-4">
@@ -25,7 +24,7 @@
 
       <p>{{ story.description }}</p>
 
-      <p><a class="btn btn-default" href="/story/{{ story.id }}" role="button">阅读更多 &raquo;</a></p>
+      <p><a class="btn btn-default" href="/story/{{ story.id }}" role="button" target="_blank">阅读更多 &raquo;</a></p>
     </div>
   {% endfor %}
 

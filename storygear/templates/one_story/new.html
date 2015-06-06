@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block in_container %}
+  <h1>{{ story.title }}</h1>
+
+  <hr/>
+
+  <div class="row">
+    <p>{{ story.description }}</p>
+  </div>
+
+  <div class="row chapter-zero">
+    <p>{{ story.content }}</p>
+
+  </div>
+  <div class="row chapter">
+    <p>章节数: {{ story.chapters | length }}</p>
+    <p>{{ story.chapters }}</p>
+
+  </div>
+
+{% endblock %}

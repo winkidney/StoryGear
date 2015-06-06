@@ -1,5 +1,6 @@
 from django.shortcuts import render_to_response
 from storygear import RestMixin
+from storygear.sgear.forms import NewStoryForm
 from storygear.sgear.models import Story
 
 
@@ -18,3 +19,10 @@ class SingleStoryView(RestMixin):
 
     def put(self, story_id, *args, **kwargs):
         raise NotImplementedError("This resource can not be modified")
+
+
+class NewStoryView(RestMixin):
+
+    def get(self, *args, **kwargs):
+        form = NewStoryForm()
+        return render_to_response("one_story/new.html", locals())
