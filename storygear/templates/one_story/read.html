@@ -5,17 +5,27 @@
   <hr/>
 
   <div class="row">
-    <p>{{ story.description }}</p>
+    <div class="col-md-12 story-meta description-font">
+      <p>章节数: {{ story.chapters | length }}</p>
+      <p >简介：{{ story.description }}</p>
+    </div>
+    <div class="col-md-12 chapter-zero">
+      <h3>引子</h3>
+      <hr/>
+      <p class="main-body-text">{{ story.content }}</p>
+    </div>
   </div>
 
-  <div class="row chapter-zero">
-    <p>{{ story.content }}</p>
-
-  </div>
+{% for chapter in story.get_selected_chapters %}
   <div class="row chapter">
-    <p>章节数: {{ story.chapters | length }}</p>
-    <p>{{ story.chapters }}</p>
+    <div class="col-md-12">
+      <h3>{{ chapter.title }}</h3>
+    </div>
 
+    <div class="col-md-12 main-body-text">
+      <hr/>
+      <p>{{ chapter.content }}</p>
+    </div>
   </div>
-
+{% endfor %}
 {% endblock %}

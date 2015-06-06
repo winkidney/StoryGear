@@ -12,8 +12,8 @@ class Tag(models.Model):
         return u"%s" % self.name
 
     class Meta:
-        verbose_name_plural = u"Chapter"
-        verbose_name = u"Chapter"
+        verbose_name_plural = u"Tags"
+        verbose_name = u"Tag"
         ordering = ['name']
         db_table = "tags"
 
@@ -58,6 +58,15 @@ class Chapter(models.Model):
     selected = models.ForeignKey(RChapter, blank=True, null=True, related_name="selected")
     voted = models.BooleanField(default=False, blank=False, null=False, help_text=u"If the best has been voted.")
 
+    @property
+    def content(self):
+        if self.selected:
+            return self.selected.content
+
+    @property
+    def title(self):
+        if self.selected:
+            return self.selected.title
 
 class Story(models.Model):
 
@@ -87,6 +96,12 @@ class Story(models.Model):
 
     ctime = models.DateTimeField(auto_now_add=True)
     mtime = models.DateTimeField(auto_now=True)
+
+    def get_chapters(self):
+        return self.chapters.order_by("index")
+
+    def get_selected_chapters(self):
+        return [chapter for chapter in self.chapters.order_by("index") if chapter.selected]
 
 
 
