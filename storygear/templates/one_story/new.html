@@ -1,21 +1,22 @@
 {% extends "base.html" %}
+{% load bootstrap3 %}
 {% block in_container %}
-  <h1>{{ story.title }}</h1>
+  <h1>创造属于你的故事！</h1>
 
   <hr/>
 
   <div class="row">
-    <p>{{ story.description }}</p>
-  </div>
-
-  <div class="row chapter-zero">
-    <p>{{ story.content }}</p>
-
-  </div>
-  <div class="row chapter">
-    <p>章节数: {{ story.chapters | length }}</p>
-    <p>{{ story.chapters }}</p>
-
+    <div class="col-md-12">
+      <form action="." method="post" class="form">
+      {% csrf_token %}
+      {% bootstrap_form form %}
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">
+            {% bootstrap_icon "star" %}&nbsp;保存
+          </button>
+        </div>
+      </form>
+    </div>
   </div>
 
 {% endblock %}

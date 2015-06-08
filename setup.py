@@ -10,6 +10,7 @@ here = os.path.abspath(os.path.dirname(__file__))
 
 requires = [
     'django>=1.8',
+    'django-bootstrap3',
 ]
 
 setup(

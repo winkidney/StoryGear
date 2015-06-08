@@ -1,4 +1,6 @@
+from django.http import HttpResponse
 from django.shortcuts import render_to_response
+from django.template import RequestContext
 from storygear import RestMixin
 from storygear.sgear.forms import NewStoryForm
 from storygear.sgear.models import Story
@@ -25,4 +27,13 @@ class NewStoryView(RestMixin):
 
     def get(self, *args, **kwargs):
         form = NewStoryForm()
+        return render_to_response("one_story/new.html", locals(), context_instance=RequestContext(self.request))
+
+    def post(self, *args, **kwargs):
+        form = NewStoryForm(self.request.POST)
+        if form.is_valid():
+            story = form.save(commit=False)
+            story.author = self.request.user
+            story.save()
+            return HttpResponse("Post %s created!" % story.title)
         return render_to_response("one_story/new.html", locals())

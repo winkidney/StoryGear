@@ -10,6 +10,9 @@ body {
 
 .main-body-text {
     font-size: 14px;
+    line-height: 1.6;
+    text-indent: 2em;
+    padding-bottom: 2em;
 }
 
 .story-meta {

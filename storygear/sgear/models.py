@@ -1,3 +1,4 @@
+# coding: utf-8
 from django.contrib.auth.models import User
 from django.db import models
 
@@ -43,6 +44,7 @@ class RChapter(models.Model):
     ctime = models.DateTimeField(auto_now_add=True)
 
 
+
 class Chapter(models.Model):
     def __unicode__(self):
         return u"%s" % self.index
@@ -78,9 +80,9 @@ class Story(models.Model):
         verbose_name = u"Story"
         ordering = ['ctime']
 
-    title = models.CharField(max_length=255, verbose_name=u'name', db_index=True)
-    description = models.TextField(verbose_name=u'description')
-    content = models.TextField(blank=True, help_text=u"chapter zero")
+    title = models.CharField(max_length=255, verbose_name=u'标题', db_index=True)
+    description = models.TextField(verbose_name=u'概要')
+    content = models.TextField(blank=True, verbose_name=u"引子")
 
     tags = models.ManyToManyField(Tag, related_name="tags")
 
@@ -92,7 +94,7 @@ class Story(models.Model):
     like = models.IntegerField(default=0, null=False, blank=False)
 
     author = models.ForeignKey(User)
-    is_draft = models.BooleanField(default=False, db_index=True)
+    is_draft = models.BooleanField(default=False, db_index=True, verbose_name=u"存为草稿")
 
     ctime = models.DateTimeField(auto_now_add=True)
     mtime = models.DateTimeField(auto_now=True)
