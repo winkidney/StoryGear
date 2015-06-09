@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load bootstrap3 %}
+{% block in_container %}
+  <h1>创造属于你的故事!</h1>
+
+  <hr/>
+
+  <div class="row">
+    <div class="col-md-12">
+      <form action="." method="post" class="form">
+      {% csrf_token %}
+      {% bootstrap_form form %}
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">
+            {% bootstrap_icon "star" %}&nbsp;保存更改
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+{% endblock %}

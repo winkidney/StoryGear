@@ -1,9 +1,9 @@
 from django.http import HttpResponse
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, redirect, get_object_or_404
 from django.template import RequestContext
 from storygear import RestMixin
-from storygear.sgear.forms import NewStoryForm
-from storygear.sgear.models import Story
+from storygear.sgear.forms import NewStoryForm, EditStoryForm, NewChapterForm
+from storygear.sgear.models import Story, Chapter
 
 
 class StoryHomeView(RestMixin):
@@ -19,9 +19,6 @@ class SingleStoryView(RestMixin):
         story = Story.objects.get(id=story_id)
         return render_to_response("one_story/read.html", locals())
 
-    def put(self, story_id, *args, **kwargs):
-        raise NotImplementedError("This resource can not be modified")
-
 
 class NewStoryView(RestMixin):
 
@@ -35,5 +32,41 @@ class NewStoryView(RestMixin):
             story = form.save(commit=False)
             story.author = self.request.user
             story.save()
-            return HttpResponse("Post %s created!" % story.title)
+            return redirect(story)
         return render_to_response("one_story/new.html", locals())
+
+
+class EditStoryView(RestMixin):
+
+    def get(self, story_id, *args, **kwargs):
+        story = get_object_or_404(Story, pk=story_id)
+        form = EditStoryForm(instance=story)
+        return render_to_response("one_story/edit.html", locals(), context_instance=RequestContext(self.request))
+
+    def post(self, story_id, *args, **kwargs):
+        story = get_object_or_404(Story, pk=story_id)
+        form = EditStoryForm(data=self.request.POST, instance=story)
+        if form.is_valid():
+            form.save()
+            return redirect(story)
+        return render_to_response("one_story/edit.html", locals())
+
+class NewChapterView(RestMixin):
+
+    def get(self, story_id, *args, **kwargs):
+        story = get_object_or_404(Story, pk=story_id)
+        form = NewChapterForm()
+        return render_to_response("one_story/new_chapter.html", locals(), context_instance=RequestContext(self.request))
+
+    def post(self, story_id, *args, **kwargs):
+        story = get_object_or_404(Story, pk=story_id)
+        form = NewChapterForm()
+        if form.is_valid():
+            rchapter = form.save(commit=False)
+            rchapter.author = self.request.user
+            chapter = get_object_or_404(Chapter, pk=story.latest_chapter)
+            rchapter.save()
+            chapter.rchapters.add(chapter)
+            chapter.save()
+            return redirect(chapter)
+

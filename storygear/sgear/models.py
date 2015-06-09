@@ -105,5 +105,5 @@ class Story(models.Model):
     def get_selected_chapters(self):
         return [chapter for chapter in self.chapters.order_by("index") if chapter.selected]
 
-
-
+    def get_absolute_url(self):
+        return "/story/%s/" % self.id
