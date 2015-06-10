@@ -1,3 +1,4 @@
+from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
 from django.shortcuts import render_to_response, redirect, get_object_or_404
 from django.template import RequestContext
@@ -64,9 +65,8 @@ class NewChapterView(RestMixin):
         if form.is_valid():
             rchapter = form.save(commit=False)
             rchapter.author = self.request.user
-            chapter = get_object_or_404(Chapter, pk=story.latest_chapter)
             rchapter.save()
-            chapter.rchapters.add(chapter)
-            chapter.save()
+            chapter = story.add_chapter(rchapter)
             return redirect(chapter)
+        return render_to_response("one_story/new_chapter.html", locals())
 

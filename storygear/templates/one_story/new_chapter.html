@@ -2,7 +2,7 @@
 {% load bootstrap3 %}
 {% block title %}续写章节 - {{ story.id }}{% endblock %}
 {% block in_container %}
-  <h1>{{ story.title }} - {{ story.author.username }} - 续写第{{ story.latest_chapter }}</h1>
+  <h1>{{ story.title }} - {{ story.author.username }} - 撰写第{{ story.latest_chapter }}章</h1>
 
   <hr/>
 
@@ -11,6 +11,9 @@
       <form action="." method="post" class="form">
       {% csrf_token %}
         <input type="hidden" value="{{ story.latest_chapter }}" name="chapter"/>
+        {% if form.errors %}
+          <p class="bg-danger border-radius-3px padding-1em">{{ form.errors }}</p>
+        {% endif %}
       {% bootstrap_form form %}
         <div class="form-actions">
           <button type="submit" class="btn btn-primary">

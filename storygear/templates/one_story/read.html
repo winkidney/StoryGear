@@ -16,12 +16,18 @@
     </div>
   </div>
 
-{% for chapter in story.get_selected_chapters %}
+{% for chapter in story.get_voted_chapters %}
   <div class="row chapter">
     <div class="col-md-12">
-      <h3>{{ chapter.title }}</h3>
-    </div>
+      <h3 class="col-md-12">{{ chapter.title }}
+        <small class="padding-h3">
+          <a href="#">
+            <span class="badge"><span class="glyphicon glyphicon-thumbs-up"></span>&nbsp;&nbsp;{{ chapter.rank }}</span>
+          </a>
+        </small>
+      </h3>
 
+    </div>
     <div class="col-md-12 main-body-text">
       <hr/>
       <p>{{ chapter.content }}</p>
