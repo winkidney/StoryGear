@@ -61,19 +61,21 @@ class Chapter(models.Model):
     selected = models.ForeignKey(RChapter, blank=True, null=True, related_name="selected")
     voted = models.BooleanField(default=False, blank=False, null=False, help_text=u"If the best has been voted.")
 
+    def get_child_property(self, name):
+        if self.selected:
+            return getattr(self.selected, name)
+
     @property
     def title(self):
-        if self.selected:
-            return self.selected.title
+        return self.get_child_property("title")
 
     @property
     def rank(self):
-        if self.selected:
-            return self.selected.rank
+        return self.get_child_property("rank")
 
     @property
     def stars(self):
-        return self.selected.stars
+        return self.get_child_property("stars")
 
     def select_chapter(self, chapter):
         self.selected = chapter
