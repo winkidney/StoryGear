@@ -77,6 +77,10 @@ class Chapter(models.Model):
     def stars(self):
         return self.get_child_property("stars")
 
+    @property
+    def content(self):
+        return self.get_child_property("content")
+
     def select_chapter(self, chapter):
         self.selected = chapter
         self.voted = True
