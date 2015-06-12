@@ -2,20 +2,30 @@ from django.http import HttpResponseBadRequest
 
 
 class RestMixin(object):
+    _methods = {
+        "GET": "get",
+        "POST": "post",
+        "PUT": "put",
+        "DELETE": "delete",
+    }
 
-    def __init__(self, csrf_exempt=False, decorators=None):
-        self.decorators = decorators
-        self.csrf_exempt = csrf_exempt
+    def __init__(self, decorators=None):
+        decorators_seq = []
+
+        if isinstance(decorators, (list, tuple)):
+            for decorator in decorators:
+                if not callable(decorator):
+                    raise TypeError("Decorators must be callable: except callable, got %s" % decorator)
+                decorators_seq.append(decorator)
+        elif callable(decorators):
+            decorators_seq.append(decorators)
+
+        self.decorators = tuple(decorators_seq)
 
     def call(self, function, *args, **kwargs):
-        if self.decorators is None:
-            return function(*args, **kwargs)
-        elif isinstance(self.decorators, (list, tuple)):
-            for decorator in self.decorators:
+        for decorator in self.decorators:
                 function = decorator(function)
-            return function(*args, **kwargs)
-        else:
-            return self.decorators(function)(*args, **kwargs)
+        return function(self.request, *args, **kwargs)
 
     def __call__(self, request, *args, **kwargs):
         """
@@ -24,15 +34,10 @@ class RestMixin(object):
         :return: HttpResponse
         """
         self.request = request
-
-        if request.method == "GET":
-            return self.call(self.get, *args, **kwargs)
-        elif request.method == "POST":
-            return self.call(self.post, *args, **kwargs)
-        elif request.method == "PUT":
-            return self.call(self.put, *args, **kwargs)
-        elif request.method == "DELETE":
-            return self.call(self.delete, *args, **kwargs)
+        view_func = self._methods.get(request.method, None)
+        print view_func
+        if view_func is not None:
+            return getattr(self, view_func)(request, *args, **kwargs)
         else:
             self.raise_400()
 
@@ -40,14 +45,14 @@ class RestMixin(object):
     def raise_400():
             return HttpResponseBadRequest("Method not implement.")
 
-    def get(self, *args, **kwargs):
+    def get(self, request, *args, **kwargs):
         return self.raise_400()
 
-    def post(self, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         return self.raise_400()
 
-    def put(self, *args, **kwargs):
+    def put(self, request, *args, **kwargs):
         return self.raise_400()
 
-    def delete(self, *args, **kwargs):
+    def delete(self, request, *args, **kwargs):
         return self.raise_400()
