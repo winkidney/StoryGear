@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load bootstrap3 %}
+{% block title %}登录{% endblock %}
+{% block in_container %}
+  <h1 class="text-center">登录</h1>
+
+  <hr/>
+
+  <div class="row">
+    <div class="col-md-12">
+      <form action="." method="post" class="form">
+      {% csrf_token %}
+      {% bootstrap_form form %}
+        <input type="hidden" name="next" value="{{ request.META.HTTP_REFERER }}"/>
+        <div class="form-actions form-group">
+          <button type="submit" class="btn btn-primary">
+            登录
+          </button>
+        </div>
+        <div class="form-control-static">
+          <p>没有账户？&nbsp;<a href="/accounts/register/">立即注册</a></p>
+        </div>
+      </form>
+    </div>
+  </div>
+
+{% endblock %}

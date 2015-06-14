@@ -8,7 +8,11 @@ from storygear.sgear.models import Story, Chapter
 class StoryHomeView(RestMixin):
 
     def get(self, request, *args, **kwargs):
+        """
+        :type request: django.http.request.HttpRequest
+        """
         stories = Story.objects.order_by("ctime")[0:2]
+        # todo: change slice
         return render_to_response("index.html", locals())
 
 

@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load bootstrap3 %}
+{% block title %}加入故事齿轮{% endblock %}
+{% block in_container %}
+  <h1>加入故事齿轮=w=</h1>
+
+  <hr/>
+
+  <div class="row">
+    <div class="col-md-12">
+      <form action="." method="post" class="form">
+      {% csrf_token %}
+        {% if form.errors %}
+          <p class="bg-danger border-radius-3px padding-1em">{{ form.errors }}</p>
+        {% endif %}
+      {% bootstrap_form form %}
+        <input type="hidden" name="next" value="{{ request.MEAT.HTTP_REFERER }}"/>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">
+            提交注册
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+{% endblock %}

@@ -35,7 +35,6 @@ class RestMixin(object):
         """
         self.request = request
         view_func = self._methods.get(request.method, None)
-        print view_func
         if view_func is not None:
             return getattr(self, view_func)(request, *args, **kwargs)
         else:
