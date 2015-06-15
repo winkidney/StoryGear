@@ -40,8 +40,10 @@ class RChapter(models.Model):
 
     rank = models.IntegerField(default=0, db_index=True)
     stars = models.IntegerField(default=0, db_index=True)
-    is_draft = models.BooleanField(verbose_name=u"存为草稿", default=False, db_index=True)
+    views = models.IntegerField(default=0, db_index=True, null=False, blank=False)
+    likes = models.IntegerField(default=0, db_index=True, null=False, blank=False)
 
+    is_draft = models.BooleanField(verbose_name=u"存为草稿", default=False, db_index=True)
     author = models.ForeignKey(User, null=True, blank=False)
     ctime = models.DateTimeField(auto_now_add=True)
 
@@ -78,6 +80,14 @@ class Chapter(models.Model):
         return self.get_child_property("stars")
 
     @property
+    def likes(self):
+        return self.get_child_property("likes")
+
+    @property
+    def views(self):
+        return self.get_child_property("views")
+
+    @property
     def content(self):
         return self.get_child_property("content")
 
@@ -106,8 +116,10 @@ class Story(models.Model):
     chapters = models.ManyToManyField(Chapter, related_name="chapters", verbose_name=u"Chapters")
     latest_chapter = models.IntegerField(default=1, null=False, blank=False)
 
-    rank = models.IntegerField(default=0, null=False, blank=False)
-    stars = models.IntegerField(default=0, null=False, blank=False)
+    rank = models.IntegerField(default=0, db_index=True, null=False, blank=False)
+    views = models.IntegerField(default=0, db_index=True, null=False, blank=False)
+    likes = models.IntegerField(default=0, db_index=True, null=False, blank=False)
+    stars = models.IntegerField(default=0, db_index=True, null=False, blank=False)
 
     author = models.ForeignKey(User)
     is_draft = models.BooleanField(default=False, db_index=True, verbose_name=u"存为草稿")
