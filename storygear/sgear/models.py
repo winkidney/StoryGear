@@ -97,8 +97,8 @@ class Story(models.Model):
         ordering = ['ctime']
 
     title = models.CharField(max_length=255, verbose_name=u'标题', db_index=True)
-    description = models.TextField(verbose_name=u'概要')
-    content = models.TextField(blank=True, verbose_name=u"引子")
+    description = models.TextField(verbose_name=u'概要', help_text=u"说说你的想法，比如希望故事怎么发展=w=")
+    content = models.TextField(blank=False, verbose_name=u"第零章")
 
     tags = models.ManyToManyField(Tag, related_name="tags")
 
