@@ -1,11 +1,9 @@
 from django.conf.urls import include, url
-from django.contrib.auth.decorators import login_required
-from django.views.generic.edit import CreateView
-from django.contrib.auth.forms import UserCreationForm
 from storygear.account.views import ProfileView
-from storygear.sgear.views import StoryHomeView, SingleStoryView, NewStoryView, EditStoryView, NewChapterView
 from django.views.generic.edit import CreateView
 from django.contrib.auth.forms import UserCreationForm
+
+from django.contrib.auth.views import logout
 
 urlpatterns = (
     # url('^register/$', CreateView.as_view(
@@ -23,13 +21,12 @@ urlpatterns = (
         },
     ),
     url(
-        '^login/$',
+        '^logout/$',
         'django.contrib.auth.views.logout',
         {
-            # 'template_name': 'accounts/.html',
-            # 'redirect_field_name': 'next',
-            'success_url': '/',
-        },
+            'next_page': '/',
+            'redirect_field_name': 'next'
+        }
     ),
     url('^register/$', CreateView.as_view(
         template_name='accounts/register.html',
