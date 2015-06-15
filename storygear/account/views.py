@@ -1,8 +1,8 @@
+from django.http import HttpResponse
 from storygear import RestMixin
 
 
-class LoginView(RestMixin):
+class ProfileView(RestMixin):
 
     def get(self, request, *args, **kwargs):
-        form = request
-        pass
+        return HttpResponse(self.request.user.username)
