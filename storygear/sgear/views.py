@@ -1,4 +1,4 @@
-from django.shortcuts import render_to_response, redirect, get_object_or_404
+from django.shortcuts import redirect, get_object_or_404
 from django.template import RequestContext
 from storygear import RestMixin
 from storygear.sgear.forms import NewStoryForm, EditStoryForm, NewChapterForm
@@ -13,21 +13,21 @@ class StoryHomeView(RestMixin):
         """
         stories = Story.objects.order_by("ctime")[0:2]
         # todo: change slice
-        return render_to_response("index.html", locals())
+        return self.render("index.html", locals())
 
 
 class SingleStoryView(RestMixin):
 
     def get(self, request, story_id, *args, **kwargs):
         story = Story.objects.get(id=story_id)
-        return render_to_response("one_story/read.html", locals())
+        return self.render("one_story/read.html", locals())
 
 
 class NewStoryView(RestMixin):
 
     def get(self, request, *args, **kwargs):
         form = NewStoryForm()
-        return render_to_response("one_story/new.html", locals(), context_instance=RequestContext(request))
+        return self.render("one_story/new.html", locals())
 
     def post(self, request, *args, **kwargs):
         form = NewStoryForm(request.POST)
@@ -36,7 +36,7 @@ class NewStoryView(RestMixin):
             story.author = request.user
             story.save()
             return redirect(story)
-        return render_to_response("one_story/new.html", locals())
+        return self.render("one_story/new.html", locals())
 
 
 class EditStoryView(RestMixin):
@@ -44,7 +44,7 @@ class EditStoryView(RestMixin):
     def get(self, request, story_id, *args, **kwargs):
         story = get_object_or_404(Story, pk=story_id)
         form = EditStoryForm(instance=story)
-        return render_to_response("one_story/edit.html", locals(), context_instance=RequestContext(request))
+        return self.render("one_story/edit.html", locals())
 
     def post(self, request, story_id, *args, **kwargs):
         story = get_object_or_404(Story, pk=story_id)
@@ -52,14 +52,14 @@ class EditStoryView(RestMixin):
         if form.is_valid():
             form.save()
             return redirect(story)
-        return render_to_response("one_story/edit.html", locals())
+        return self.render("one_story/edit.html", locals())
 
 class NewChapterView(RestMixin):
 
     def get(self, request, story_id, *args, **kwargs):
         story = get_object_or_404(Story, pk=story_id)
         form = NewChapterForm()
-        return render_to_response("one_story/new_chapter.html", locals(), context_instance=RequestContext(request))
+        return self.render("one_story/new_chapter.html", locals())
 
     def post(self, request, story_id, *args, **kwargs):
         story = get_object_or_404(Story, pk=story_id)
@@ -70,7 +70,7 @@ class NewChapterView(RestMixin):
             rchapter.save()
             chapter = story.add_chapter(rchapter)
             return redirect(chapter)
-        return render_to_response("one_story/new_chapter.html", locals())
+        return self.render("one_story/new_chapter.html", locals())
 
 class ChapterAction(RestMixin):
 
