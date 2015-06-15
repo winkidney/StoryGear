@@ -1,4 +1,6 @@
 from django.http import HttpResponseBadRequest
+from django.shortcuts import render_to_response
+from django.template import RequestContext
 
 
 class RestMixin(object):
@@ -55,3 +57,10 @@ class RestMixin(object):
 
     def delete(self, request, *args, **kwargs):
         return self.raise_400()
+
+    def render(self, template_name, context_dict=None, use_context=True, **kwargs):
+        if use_context:
+            return render_to_response(template_name, context_dict, context_instance=RequestContext(self.request), **kwargs)
+        else:
+            return render_to_response(template_name, context_dict, **kwargs)
+
