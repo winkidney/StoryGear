@@ -68,6 +68,10 @@ class Chapter(models.Model):
             return getattr(self.selected, name)
 
     @property
+    def relative_url(self):
+        return "chapter%s/" % self.index
+
+    @property
     def title(self):
         return self.get_child_property("title")
 
@@ -135,6 +139,10 @@ class Story(models.Model):
 
     def get_absolute_url(self):
         return "/story/%s/" % self.id
+
+    @property
+    def voting_chapter(self):
+        return RChapter.objects.get(index=self.latest_chapter)
 
     def add_chapter(self, real_chapter):
         try:

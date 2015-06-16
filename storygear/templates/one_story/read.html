@@ -44,13 +44,16 @@
     </div>
   </div>
 
-{% for chapter in story.get_voted_chapters %}
+{% for chapter in story.get_chapters %}
   <div class="row chapter-head position-relative">
     <div class="col-md-3">
-      <h3><span>{{ story.title }}</span></h3>
+      <h3><span>
+          第 {{ chapter.index }} 章{% if chapter.title %} - {{ chapter.title }}{% endif %}
+      </span></h3>
     </div>
     <div class="col-md-9 text-right bottom-0">
         <small class="padding-h3">
+        {% if chapter.voted %}
         <a href="#" class="vertical-align-center">
           <span class="badge"><span class="glyphicon glyphicon-thumbs-up"></span>&nbsp;&nbsp;{{ chapter.likes }}</span>
         </a>
@@ -60,6 +63,12 @@
         <a href="#">
           <span class="badge"><span class="glyphicon glyphicon-eye-open"></span>&nbsp;&nbsp;{{ chapter.views }}</span>
         </a>
+      {% else %}
+        <a href="#">
+          <span class="badge"><span class="glyphicon glyphicon-pencil"></span>&nbsp;&nbsp;{{ chapter.rchapters| length }}</span>
+        </a>
+      {% endif %}
+
       </small>
       <div class="btn-group inline-group">
         <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
@@ -67,23 +76,28 @@
           <span class="caret"></span>
         </button>
         <ul class="dropdown-menu text-left" role="menu">
-
-          {% if chapter.voted %}
-            <li><a href="#">撰写序章</a></li>
-          {% else %}
-            <li><a href="{{ chapter }}/">阅读候选章节</a></li>
+          <li><a href="{{ chapter.relative_url }}">阅读所有续章</a></li>
+          {% if not chapter.voted %}
+            <li><a href="#">撰写续章</a></li>
+            <li><a href="#">评分</a></li>
           {% endif %}
-          <li><a href="#">评分</a></li>
         </ul>
       </div>
 
     </div>
   </div>
   <hr/>
+
   <div class="row chapter-body position-relative">
     <div class="col-md-12">
-      <p class="main-body-text">{{ chapter.content }}</p>
+      {% if chapter.voted %}
+        <p class="main-body-text">{{ chapter.content }}</p>
+      {% else %}
+        <p>这个章节还在募集中，开始撰写吧！</p>
+      {% endif %}
     </div>
   </div>
+
 {% endfor %}
+
 {% endblock %}
