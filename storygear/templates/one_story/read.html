@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block in_container %}
-  <div class="row">
+  <div class="row position-relative">
     <div class="col-md-3">
       <h1><span>{{ story.title }}</span></h1>
     </div>
@@ -21,7 +21,7 @@
           更多
           <span class="caret"></span>
         </button>
-        <ul class="dropdown-menu" role="menu">
+        <ul class="dropdown-menu text-left" role="menu">
           <li><a href="#">为故事添加标签</a></li>
           <li><a href="#">推荐这个故事</a></li>
           <li><a href="#">评分</a></li>
@@ -32,7 +32,7 @@
 
   <hr/>
 
-  <div class="row">
+  <div class="row position-relative">
     <div class="col-md-12 story-meta description-font">
       <p>章节数: {{ story.chapters | length }}</p>
       <p >简介：{{ story.description }}</p>
@@ -45,40 +45,40 @@
   </div>
 
 {% for chapter in story.get_voted_chapters %}
-  <div class="row chapter">
-    <div class="col-md-12">
-      <h3>{{ chapter.title }}
-        <small class="padding-h3 vertical-align-center">
-          <a href="#">
-            <span class="badge"><span class="glyphicon glyphicon-thumbs-up"></span>&nbsp;&nbsp;{{ chapter.likes }}</span>
-          </a>
-          <a href="#">
-            <span class="badge"><span class="glyphicon glyphicon-heart"></span>&nbsp;&nbsp;{{ story.stars }}</span>
-          </a>
-          <a href="#">
-            <span class="badge"><span class="glyphicon glyphicon-eye-open"></span>&nbsp;&nbsp;{{ chapter.views }}</span>
-          </a>
-        </small>
-        <div class="btn-group inline-group">
-          <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
-            更多
-            <span class="caret"></span>
-          </button>
-          <ul class="dropdown-menu" role="menu">
-            <li><a href="#">阅读候选章节</a></li>
-            <li><a href="#">撰写章节</a></li>
-            <li class="divider"></li>
-            <li><a href="#">为故事添加标签</a></li>
-            <li><a href="#">推荐这个章节</a></li>
-          </ul>
-        </div>
-      </h3>
-
+  <div class="row position-relative">
+    <div class="col-md-3">
+      <h3><span>{{ story.title }}</span></h3>
+    </div>
+    <div class="col-md-9 text-right bottom-0">
+        <small class="padding-h3">
+        <a href="#" class="vertical-align-center">
+          <span class="badge"><span class="glyphicon glyphicon-thumbs-up"></span>&nbsp;&nbsp;{{ chapter.likes }}</span>
+        </a>
+        <a href="#">
+          <span class="badge"><span class="glyphicon glyphicon-heart"></span>&nbsp;&nbsp;{{ chapter.stars }}</span>
+        </a>
+        <a href="#">
+          <span class="badge"><span class="glyphicon glyphicon-eye-open"></span>&nbsp;&nbsp;{{ chapter.views }}</span>
+        </a>
+      </small>
+      <div class="btn-group inline-group">
+        <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
+          更多
+          <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu text-left" role="menu">
+          <li><a href="#">阅读候选章节</a></li>
+          <li><a href="#">撰写序章</a></li>
+          <li><a href="#">推荐这个章节</a></li>
+        </ul>
+      </div>
 
     </div>
-    <div class="col-md-12 main-body-text">
-      <hr/>
-      <p>{{ chapter.content }}</p>
+  </div>
+  <hr/>
+  <div class="row position-relative">
+    <div class="col-md-12">
+      <p class="main-body-text">{{ chapter.content }}</p>
     </div>
   </div>
 {% endfor %}
