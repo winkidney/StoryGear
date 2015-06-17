@@ -36,9 +36,9 @@ class RestMixin(object):
         :return: HttpResponse
         """
         self.request = request
-        view_func = self._methods.get(request.method, None)
-        if view_func is not None:
-            return getattr(self, view_func)(request, *args, **kwargs)
+        view_func_name = self._methods.get(request.method, None)
+        if view_func_name is not None:
+            return self.call(getattr(self, view_func_name), *args, **kwargs)
         else:
             return self.raise_400()
 
