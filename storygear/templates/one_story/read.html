@@ -64,7 +64,7 @@
           <span class="badge"><span class="glyphicon glyphicon-eye-open"></span>&nbsp;&nbsp;{{ chapter.views }}</span>
         </a>
       {% else %}
-        <a href="#">
+        <a href="new_chapter/">
           <span class="badge"><span class="glyphicon glyphicon-pencil"></span>&nbsp;&nbsp;{{ chapter.rchapters| length }}</span>
         </a>
       {% endif %}
@@ -77,9 +77,13 @@
         </button>
         <ul class="dropdown-menu text-left" role="menu">
           <li><a href="{{ chapter.relative_url }}">阅读所有续章</a></li>
+          {% if not chapter.voted and story.author.id == request.user.id %}
+            <li><a href="{{ chapter.relative_url }}end/">终结本章</a></li>
+          {% endif %}
           {% if not chapter.voted %}
-            <li><a href="#">撰写续章</a></li>
+            <li><a href="new_chapter/">撰写续章</a></li>
             <li><a href="#">评分</a></li>
+
           {% endif %}
         </ul>
       </div>
