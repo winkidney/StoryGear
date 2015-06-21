@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 {% block in_container %}
   <div class="row position-relative">
-    <div class="col-md-3">
+    <div class="col-md-7">
       <h1><span>{{ story.title }}</span></h1>
     </div>
-    <div class="col-md-9 text-right bottom-0">
+    <div class="col-md-5 text-right bottom-0">
       <small class="padding-h3">
         <a href="#" class="vertical-align-center" data-toggle="tooltip" data-placement="top" title="点赞">
           <span class="badge"><span class="glyphicon glyphicon-thumbs-up"></span>&nbsp;&nbsp;{{ story.likes }}</span>
@@ -46,12 +46,12 @@
 
 {% for chapter in story.get_chapters %}
   <div class="row chapter-head position-relative">
-    <div class="col-md-3">
+    <div class="col-md-7">
       <h3><span>
           第 {{ chapter.index }} 章{% if chapter.dchapter %} - {{ chapter.dchapter.title }}{% endif %}
       </span></h3>
     </div>
-    <div class="col-md-9 text-right bottom-0">
+    <div class="col-md-5 text-right bottom-0">
       <small class="padding-h3">
       {% if chapter.dchapter %}
         <a href="#" class="vertical-align-center" data-toggle="tooltip" data-placement="top" title="点赞">

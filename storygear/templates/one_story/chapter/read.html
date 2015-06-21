@@ -4,10 +4,10 @@
 {% endblock %}
 {% block in_container %}
   <div class="row position-relative">
-    <div class="col-md-5">
+    <div class="col-md-7">
       <h1>第{{ chapter.index }}章&nbsp;&nbsp;<small class="font-14px">返回 <a href="{{ story.get_absolute_url }}" class="no-link-style">{{ story.title }}</a></small></h1>
     </div>
-    <div class="col-md-7 text-right bottom-0">
+    <div class="col-md-5 text-right bottom-0">
       <small class="padding-h3">
         <a {% if not chapter.voted %}href="{{ story.get_absolute_url }}new_chapter/"{% endif %} data-toggle="tooltip" data-placement="top" title="已经有{{ chapter.rchapters.all | length }}人续写了这一章">
           <span class="badge"><span class="glyphicon glyphicon-pencil"></span>&nbsp;&nbsp;{{ chapter.rchapters | length }}</span>
@@ -41,7 +41,7 @@
 
 {% for rchapter in chapter.rchapters.all %}
   <div class="row chapter-head position-relative">
-    <div class="col-md-3">
+    <div class="col-md-7">
       <h3><span>
         {{ rchapter.title }}
         <small>by
@@ -53,7 +53,7 @@
         </small>
       </span></h3>
     </div>
-    <div class="col-md-9 text-right bottom-0">
+    <div class="col-md-5 text-right bottom-0">
       <small class="padding-h3">
         <a href="#" class="vertical-align-center" data-toggle="tooltip" data-placement="top" title="点赞">
           <span class="badge"><span class="glyphicon glyphicon-thumbs-up"></span>&nbsp;&nbsp;{{ rchapter.likes }}</span>

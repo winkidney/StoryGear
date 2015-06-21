@@ -1,3 +1,4 @@
 # StoryGear
 Inspired by StoryWars.net.
-Test push
+
+Alpha 0.0.1
