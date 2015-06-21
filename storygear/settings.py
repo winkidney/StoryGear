@@ -23,7 +23,10 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 SECRET_KEY = '8yy!up3$j)q0e)q&-m11%)sgt%gkvhuco5pjge5p0e(*-0l7-e'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+try:
+    from storygear.localsettings import DEBUG
+except (IOError, ImportError):
+    DEBUG = True
 
 ALLOWED_HOSTS = ['localhost']
 
