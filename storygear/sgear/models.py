@@ -63,42 +63,66 @@ class Chapter(models.Model):
     selected = models.ForeignKey(RChapter, blank=True, null=True, related_name="selected")
     voted = models.BooleanField(default=False, blank=False, null=False, help_text=u"If the best has been voted.")
 
-    def get_child_property(self, name):
+    @property
+    def dchapter(self):
+        """
+        display chapter
+        """
         if self.selected:
-            return getattr(self.selected, name)
+            return self.selected
+        else:
+            if self.rchapters.exists():
+                return self.rchapters.order_by("likes")[0]
+            return None
+
+    def add_chapter(self, rchapter):
+        if not isinstance(rchapter, RChapter):
+            raise TypeError("chapter requires RChapter instance.Expect %s, got %s" % (RChapter, rchapter))
+        self.rchapters.add(rchapter)
+        return rchapter
 
     @property
     def relative_url(self):
         return "chapter%s/" % self.index
 
-    @property
-    def title(self):
-        return self.get_child_property("title")
-
-    @property
-    def rank(self):
-        return self.get_child_property("rank")
-
-    @property
-    def stars(self):
-        return self.get_child_property("stars")
-
-    @property
-    def likes(self):
-        return self.get_child_property("likes")
-
-    @property
-    def views(self):
-        return self.get_child_property("views")
-
-    @property
-    def content(self):
-        return self.get_child_property("content")
-
     def select_chapter(self, chapter):
         self.selected = chapter
         self.voted = True
 
+    @classmethod
+    def get_by_story(cls, story_id, chapter_index):
+        chapters = cls.objects.filter(story__id=story_id, index=chapter_index).all()
+        if chapters:
+            return chapters[0]
+        else:
+            return None
+
+    @classmethod
+    def end_chapter(cls, chapter_index, selected=None):
+        """
+        Lock and give a selected chapter to
+        :return True if success, false if the chapter does not exist.
+        :rtype boolean
+        """
+        try:
+            chapter = cls.objects.get(index=chapter_index)
+        except ObjectDoesNotExist:
+            return False
+
+        chapter._lock()
+        if selected is not None:
+            chapter.select_chapter(chapter)
+
+        chapter.save()
+
+        return chapter
+
+    def _lock(self):
+        self.voted = True
+
+    def lock(self):
+        self._lock()
+        self.save()
 
 class Story(models.Model):
 
@@ -117,8 +141,8 @@ class Story(models.Model):
     tags = models.ManyToManyField(Tag, related_name="tags")
 
     chapter_count = models.IntegerField(default=0, verbose_name=u"Chapter count")
-    chapters = models.ManyToManyField(Chapter, related_name="chapters", verbose_name=u"Chapters")
-    latest_chapter = models.IntegerField(default=1, null=False, blank=False)
+    chapters = models.ManyToManyField(Chapter, related_name="story", verbose_name=u"Chapters")
+    latest_chapter = models.IntegerField(default=0, null=False, blank=False)
 
     rank = models.IntegerField(default=0, db_index=True, null=False, blank=False)
     views = models.IntegerField(default=0, db_index=True, null=False, blank=False)
@@ -134,9 +158,6 @@ class Story(models.Model):
     def get_chapters(self):
         return self.chapters.order_by("index")
 
-    def get_voted_chapters(self):
-        return [chapter for chapter in self.chapters.order_by("index") if chapter.selected]
-
     def get_absolute_url(self):
         return "/story/%s/" % self.id
 
@@ -144,13 +165,28 @@ class Story(models.Model):
     def voting_chapter(self):
         return RChapter.objects.get(index=self.latest_chapter)
 
-    def add_chapter(self, real_chapter):
-        try:
-            chapter = Chapter.objects.get(id=self.latest_chapter)
-        except ObjectDoesNotExist:
-            chapter = Chapter(index=self.latest_chapter)
-            chapter.save()
+    def add_rchapter(self, real_chapter):
+        """
+        :rtype Chapter
+        """
+        chapter = Chapter.objects.get(index=self.latest_chapter)
 
-        chapter.rchapters.add(real_chapter)
+        chapter.add_chapter(real_chapter)
+        self.chapter_count += 1
         chapter.save()
+        self.save()
         return chapter
+
+    def new_chapter(self):
+        self.latest_chapter += 1
+        new_chapter = Chapter(index=self.latest_chapter)
+        new_chapter.save()
+
+        self.chapters.add(new_chapter)
+        self.save()
+
+    def end_start_chapter(self, chapter_selected=None):
+        chapter = Chapter.objects.get(index=self.latest_chapter)
+        chapter.end_chapter(self.latest_chapter, chapter_selected)
+
+        self.new_chapter()

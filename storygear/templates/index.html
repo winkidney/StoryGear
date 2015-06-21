@@ -17,14 +17,16 @@
 {% block in_container %}
 
   <h1>热门的故事</h1>
+  <hr/>
   <div class="row">
   {% for story in stories %}
     <div class="col-md-4">
-      <h2>{{ story.title }}</h2>
+      <h2>{{ story.title }} <small>by {{ story.author.username }}</small></h2>
 
-      <p>{{ story.description }}</p>
+      <p class="gray-text story-brick-padding">{{ story.description }}&nbsp;</p>
+      <p></p>
 
-      <p><a class="btn btn-default" href="/story/{{ story.id }}" role="button" target="_blank">阅读更多 &raquo;</a></p>
+      <p class="text-right"><a class="btn btn-default" href="{{ story.get_absolute_url }}" role="button" target="_blank">阅读更多 &raquo;</a></p>
     </div>
   {% endfor %}
 

@@ -15,9 +15,32 @@ body {
     padding-bottom: 2em;
 }
 
+.intro-text {
+    font-size: 10px;
+    text-indent: 20px;
+    color: dimgray;
+}
+
+.gray-text{
+    color: dimgray;
+}
+
+.font-14px {
+    font-size: 14px;
+}
+
+.no-link-style {
+    text-decoration: none;
+}
+
+.no-link-style:hover {
+    text-decoration: none;
+}
+
 .padding-1em {
     padding: 1em;
 }
+
 .padding-h3 {
     padding-left: 15px;
     padding-right: 15px;
@@ -36,4 +59,10 @@ body {
     bottom: 0;
     position: absolute;
     right: 0;
+}
+
+/*home page style*/
+
+.story-brick-padding {
+    padding-left: 2px;
 }

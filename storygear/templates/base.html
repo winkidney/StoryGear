@@ -67,7 +67,7 @@
             </ul>
           </li>
         </ul>
-      <form action="/accounts/login/" class="navbar-form navbar-right form-inline" method="post">
+      <form action="/accounts/login/?next={{ request.META.path }}" class="navbar-form navbar-right form-inline" method="post">
       {% if not request.user.is_authenticated %}
         {% csrf_token %}
         <div class="form-group">
@@ -76,8 +76,9 @@
         <div class="form-group">
             <input type="password" name="password" placeholder="密码" class="form-control">
         </div>
+        <input type="hidden" name="next" value="{{ request.META.HTTP_REFERER }}"/>
         <button type="submit" class="btn btn-success form-control">登入</button>
-        <a type="submit" class="btn btn-success form-control">注册</a>
+        <a href="/accounts/register/" class="btn btn-success form-control">注册</a>
       {% else %}
         <a href="/accounts/logout/" class="btn btn-info form-control">登出</a>
       {% endif %}

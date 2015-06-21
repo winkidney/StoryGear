@@ -33,3 +33,10 @@ angular.module('demoApp').controller('ModalInstanceCtrl', function ($scope, $mod
         $modalInstance.dismiss('cancel');
     };
 });
+
+$(document).ready(function() {
+    $(function () {
+      $('[data-toggle="tooltip"]').tooltip()
+    });
+}
+);

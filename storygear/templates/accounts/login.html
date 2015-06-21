@@ -8,7 +8,7 @@
 
   <div class="row">
     <div class="col-md-12">
-      <form action="." method="post" class="form">
+      <form action=".?next={{ request.META.HTTP_REFERER }}" method="post" class="form">
       {% csrf_token %}
       {% bootstrap_form form %}
         {% if request.GET.next %}

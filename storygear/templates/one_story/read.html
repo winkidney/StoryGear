@@ -5,14 +5,14 @@
       <h1><span>{{ story.title }}</span></h1>
     </div>
     <div class="col-md-9 text-right bottom-0">
-        <small class="padding-h3">
-        <a href="#" class="vertical-align-center">
+      <small class="padding-h3">
+        <a href="#" class="vertical-align-center" data-toggle="tooltip" data-placement="top" title="点赞">
           <span class="badge"><span class="glyphicon glyphicon-thumbs-up"></span>&nbsp;&nbsp;{{ story.likes }}</span>
         </a>
-        <a href="#">
+        <a href="#" data-toggle="tooltip" data-placement="top" title="收藏">
           <span class="badge"><span class="glyphicon glyphicon-heart"></span>&nbsp;&nbsp;{{ story.stars }}</span>
         </a>
-        <a href="#">
+        <a href="#" data-toggle="tooltip" data-placement="top" title="已被阅读{{ story.views }}次">
           <span class="badge"><span class="glyphicon glyphicon-eye-open"></span>&nbsp;&nbsp;{{ story.views }}</span>
         </a>
       </small>
@@ -48,24 +48,28 @@
   <div class="row chapter-head position-relative">
     <div class="col-md-3">
       <h3><span>
-          第 {{ chapter.index }} 章{% if chapter.title %} - {{ chapter.title }}{% endif %}
+          第 {{ chapter.index }} 章{% if chapter.dchapter %} - {{ chapter.dchapter.title }}{% endif %}
       </span></h3>
     </div>
     <div class="col-md-9 text-right bottom-0">
-        <small class="padding-h3">
-        {% if chapter.voted %}
-        <a href="#" class="vertical-align-center">
-          <span class="badge"><span class="glyphicon glyphicon-thumbs-up"></span>&nbsp;&nbsp;{{ chapter.likes }}</span>
+      <small class="padding-h3">
+      {% if chapter.dchapter %}
+        <a href="#" class="vertical-align-center" data-toggle="tooltip" data-placement="top" title="点赞">
+          <span class="badge"><span class="glyphicon glyphicon-thumbs-up"></span>&nbsp;&nbsp;{{ chapter.dchapter.likes }}</span>
         </a>
-        <a href="#">
-          <span class="badge"><span class="glyphicon glyphicon-heart"></span>&nbsp;&nbsp;{{ chapter.stars }}</span>
+        <a href="#" data-toggle="tooltip" data-placement="top" title="收藏">
+          <span class="badge"><span class="glyphicon glyphicon-heart"></span>&nbsp;&nbsp;{{ chapter.dchapter.stars }}</span>
         </a>
-        <a href="#">
-          <span class="badge"><span class="glyphicon glyphicon-eye-open"></span>&nbsp;&nbsp;{{ chapter.views }}</span>
+        <a href="#" data-toggle="tooltip" data-placement="top" title="这个章节已经被阅读{{ chapter.dchapter.views }}次">
+          <span class="badge"><span class="glyphicon glyphicon-eye-open"></span>&nbsp;&nbsp;{{ chapter.dchapter.views }}</span>
         </a>
-      {% else %}
-        <a href="new_chapter/">
-          <span class="badge"><span class="glyphicon glyphicon-pencil"></span>&nbsp;&nbsp;{{ chapter.rchapters| length }}</span>
+        <a href="#" data-toggle="tooltip" data-placement="top" title="章节被锁定，无法投稿">
+          <span class="badge"><span class="glyphicon glyphicon-lock"></span></span>
+        </a>
+      {% endif %}
+      {% if not chapter.voted %}
+        <a href="new_chapter/" data-toggle="tooltip" data-placement="top" title="已经有{{ chapter.rchapters.all | length }}人续写了这一章">
+          <span class="badge"><span class="glyphicon glyphicon-pencil"></span>&nbsp;&nbsp;{{ chapter.rchapters.all | length }}</span>
         </a>
       {% endif %}
 
@@ -76,15 +80,20 @@
           <span class="caret"></span>
         </button>
         <ul class="dropdown-menu text-left" role="menu">
-          <li><a href="{{ chapter.relative_url }}">阅读所有续章</a></li>
-          {% if not chapter.voted and story.author.id == request.user.id %}
-            <li><a href="{{ chapter.relative_url }}end/">终结本章</a></li>
+        {% if not chapter.voted %}
+          <li><a href="new_chapter/">撰写续章</a></li>
+        {% endif %}
+          <li><a href="{{ chapter.relative_url }}">阅读所有续章({{ chapter.rchapters.all | length }})</a></li>
+        {% if story.author.id == request.user.id %}
+          {% if not chapter.voted%}
+            <li data-toggle="tooltip" data-placement="left" title="锁定后这个章节不接受新的续写"><a href="{{ chapter.relative_url }}end/">终结(锁定)并开始下一章</a></li>
+          {% elif chapter.voted %}
+            <li data-toggle="tooltip" data-placement="left" title="解除锁定（暂时不可用）"><a href="#">解除锁定</a></li>
           {% endif %}
-          {% if not chapter.voted %}
-            <li><a href="new_chapter/">撰写续章</a></li>
-            <li><a href="#">评分</a></li>
-
-          {% endif %}
+        {% endif %}
+        {% if not chapter.voted %}
+          <li><a href="#">评分</a></li>
+        {% endif %}
         </ul>
       </div>
 
@@ -94,10 +103,14 @@
 
   <div class="row chapter-body position-relative">
     <div class="col-md-12">
-      {% if chapter.voted %}
-        <p class="main-body-text">{{ chapter.content }}</p>
+      {% if chapter.dchapter %}
+        <p class="main-body-text">{{ chapter.dchapter.content }}</p>
       {% else %}
-        <p>这个章节还在募集中，开始撰写吧！</p>
+        {% if chapter.voted %}
+          <p class="main-body-text">诶？？？章节还没有内容却被锁定了？请和作者联系哦</p>
+        {% else %}
+          <p class="main-body-text">章节还没有内容哦，开始<a href="new_chapter/">撰写</a>吧！</p>
+        {% endif %}
       {% endif %}
     </div>
   </div>
