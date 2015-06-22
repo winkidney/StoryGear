@@ -63,9 +63,11 @@
         <a href="#" data-toggle="tooltip" data-placement="top" title="这个章节已经被阅读{{ chapter.dchapter.views }}次">
           <span class="badge"><span class="glyphicon glyphicon-eye-open"></span>&nbsp;&nbsp;{{ chapter.dchapter.views }}</span>
         </a>
+        {% if chapter.voted %}
         <a href="#" data-toggle="tooltip" data-placement="top" title="章节被锁定，无法投稿">
           <span class="badge"><span class="glyphicon glyphicon-lock"></span></span>
         </a>
+        {% endif %}
       {% endif %}
       {% if not chapter.voted %}
         <a href="new_chapter/" data-toggle="tooltip" data-placement="top" title="已经有{{ chapter.rchapters.all | length }}人续写了这一章">
