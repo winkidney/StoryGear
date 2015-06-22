@@ -169,7 +169,7 @@ class Story(models.Model):
         """
         :rtype Chapter
         """
-        chapter = Chapter.objects.get(index=self.latest_chapter)
+        chapter = Chapter.objects.filter(story__id=self.id).filter(index=self.latest_chapter).first()
 
         chapter.add_chapter(real_chapter)
         self.chapter_count += 1
